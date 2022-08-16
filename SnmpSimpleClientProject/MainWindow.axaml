@@ -6,10 +6,10 @@
         Width="600" Height="400"
         x:Class="SnmpSimpleClientProject.MainWindow"
         Title="SnmpSimpleClientProject">
-  <Grid RowDefinitions="Auto,*,Auto">
+  <Grid RowDefinitions="Auto,*,Auto" Background="#EEE">
 
     <!-- Title bar-->
-    <Grid Grid.Row="0" Background="Orange" Height="40" ColumnDefinitions="*">
+    <Grid Grid.Row="0" Background="#EEE" Height="40" ColumnDefinitions="*">
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">
         <Label FontWeight="Black" >SNMP</Label>
         <Label>Simple Client</Label>
@@ -17,17 +17,62 @@
     </Grid>
 
     <!-- Main area -->
-    <Grid Grid.Row="1" ColumnDefinitions="Auto,*" Background="#888">
+    <Grid Grid.Row="1" ColumnDefinitions="Auto,*" Background="#777">
       <!-- Volume Bar -->
-      <Rectangle Grid.Column="0" Fill="Purple" Width="140"></Rectangle>
+      <Grid Grid.Column="0"  Width="140">
+        <StackPanel Margin="0 5" >
+          
+          <Label>Ip address:</Label>
+          <TextBox></TextBox>
+          
+          <Label>User name: </Label>
+          <TextBox></TextBox>
+          
+
+          <Label>Auth Password:</Label>
+          <TextBox></TextBox>
+
+          
+          <Label>Priv Password:</Label>
+          <TextBox></TextBox>
+            
+        </StackPanel>
+      </Grid>
       <!-- Graph -->
-      <Rectangle Grid.Column="1" Fill="Black"></Rectangle>
+      <Grid Grid.Column="1" RowDefinitions="Auto,*" Background="#AAA" >
+
+        <StackPanel Grid.Row="0">
+
+          <StackPanel Orientation="Horizontal">
+            <RadioButton Margin="5 0 5 0" IsChecked="True">GET</RadioButton>
+            <RadioButton>SET</RadioButton>
+          </StackPanel>
+
+          <Label>OID:</Label>
+          <TextBox Margin="5"></TextBox>
+
+          <Button HorizontalAlignment="Right" Margin="5" >Perform</Button>
+         
+        </StackPanel>
+        
+        
+        <TextBlock Grid.Row="1" Margin="5 0 5 5" Background="Black" Foreground="#41FF00" Padding="5">
+          Oid 1.3.6.5.3 value test1
+          Oid 1.3.6.5.3 value test1
+          Oid 1.3.6.5.3 value test1
+          Oid 1.3.6.5.3 value test1
+          Oid 1.3.6.5.3 value test1
+          Oid 1.3.6.5.3 value test1
+        </TextBlock>
+      </Grid>
     </Grid>
 
     <!-- Bottom bar-->
-    <Grid  Grid.Row="2" Margin="8"  ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto,Auto,Auto" Background="#FFF">
-      <Label Grid.Column="0" Margin="0,0,8,0">V2</Label>
-      <Label Grid.Column="1">Timeout: 60000 ms</Label>
+    <Grid  Grid.Row="2" Margin="8"  ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto" Background="#EEE">
+      <Label Grid.Column="0" Margin="0,0,8,0">V3</Label>
+      <Label Grid.Column="1" >Timeout: 60000 ms</Label>
+      <Button Grid.Column="2" Margin="2,-5,8,0">MD5</Button>
+      <Button Grid.Column="3" Margin="2,-5,8,0">DES</Button>
       <Label Grid.Column="6">Connected</Label>
     </Grid>
   </Grid>
