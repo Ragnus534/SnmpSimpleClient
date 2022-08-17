@@ -23,18 +23,18 @@
         <StackPanel Margin="0 5" >
           
           <Label>Ip address:</Label>
-          <TextBox></TextBox>
+          <TextBox x:Name="ipAddressTxtBox">192.168.100.22</TextBox>
           
           <Label>User name: </Label>
-          <TextBox></TextBox>
+          <TextBox x:Name="userNameTxtBox">otax</TextBox>
           
 
           <Label>Auth Password:</Label>
-          <TextBox></TextBox>
+          <TextBox x:Name="authPasswordTxtBox">otaxotax</TextBox>
 
           
           <Label>Priv Password:</Label>
-          <TextBox></TextBox>
+          <TextBox x:Name="privPasswordTxtBox">otaxotax</TextBox>
             
         </StackPanel>
       </Grid>
@@ -49,20 +49,16 @@
           </StackPanel>
 
           <Label>OID:</Label>
-          <TextBox Margin="5"></TextBox>
+          <TextBox Margin="5" x:Name="oidGetTxtBox">1.3.6.1.4.1.51847.2.1.92.0</TextBox>
 
-          <Button HorizontalAlignment="Right" Margin="5" >Perform</Button>
+          <Button HorizontalAlignment="Right" Margin="5" Click="Action" >Perform</Button>
          
         </StackPanel>
         
         
-        <TextBlock Grid.Row="1" Margin="5 0 5 5" Background="Black" Foreground="#41FF00" Padding="5">
+        <TextBlock Grid.Row="1" Margin="5 0 5 5" Background="Black" Foreground="#41FF00" Padding="5" x:Name="logTxtBox">
           Oid 1.3.6.5.3 value test1
-          Oid 1.3.6.5.3 value test1
-          Oid 1.3.6.5.3 value test1
-          Oid 1.3.6.5.3 value test1
-          Oid 1.3.6.5.3 value test1
-          Oid 1.3.6.5.3 value test1
+          
         </TextBlock>
       </Grid>
     </Grid>
