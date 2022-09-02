@@ -19,6 +19,9 @@ namespace SnmpSimpleClientProject
         private TextBox txtForSnmpSet;
         bool getOperation;
 
+        bool v3ButtonCheck;
+        bool v2ButtonCheck;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,6 +31,7 @@ namespace SnmpSimpleClientProject
             txtForSnmpSet.Margin = new Thickness(5);
             txtForSnmpSet.Name = "oidSetTxtBox";
             getOperation = true;
+            v3ButtonCheck = true;
         }
 
         public void GetPropertyChecked(object sender, RoutedEventArgs e)
@@ -97,9 +101,18 @@ namespace SnmpSimpleClientProject
                 }
 
             }).Start();
+        }
 
+        public void V3ButtonClicked(object sender, RoutedEventArgs e)
+        {
+            V2Button.IsChecked = false;
+            V3Button.IsChecked = true;
+        }
 
-
+        public void V2ButtonClicked(object sender, RoutedEventArgs e)
+        {
+            V3Button.IsChecked = false;
+            V2Button.IsChecked = true;
 
         }
     }
