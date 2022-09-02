@@ -63,12 +63,13 @@
     </Grid>
 
     <!-- Bottom bar-->
-    <Grid  Grid.Row="2" Margin="8"  ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto" Background="#EEE">
-      <Label Grid.Column="0" Margin="0,0,8,0">V3</Label>
-      <Label Grid.Column="1" >Timeout: 60000 ms</Label>
-      <Button Grid.Column="2" Margin="2,-5,8,0">MD5</Button>
-      <Button Grid.Column="3" Margin="2,-5,8,0">DES</Button>
-      <Label Grid.Column="6">Connected</Label>
+    <Grid  Grid.Row="2" Margin="8"  ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto" Background="#EEE">
+      <ToggleButton x:Name="V2Button"  Grid.Column="0" Margin="0,0,8,0" Click="V2ButtonClicked">V2</ToggleButton>
+      <ToggleButton x:Name="V3Button" Grid.Column="1" Margin="0,0,8,0" IsChecked="True" Click="V3ButtonClicked">V3</ToggleButton>
+      <Label Grid.Column="2" >Timeout: 60000 ms</Label>
+      <Button Grid.Column="3" Margin="2,-5,8,0">MD5</Button>
+      <Button Grid.Column="4" Margin="2,-5,8,0">DES</Button>
+      <Label Grid.Column="7">Connected</Label>
     </Grid>
   </Grid>
 </Window>
