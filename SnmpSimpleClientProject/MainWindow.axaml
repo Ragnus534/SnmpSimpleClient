@@ -19,22 +19,26 @@
     <Grid Grid.Row="1" ColumnDefinitions="Auto,*" Background="#777">
       <!-- Volume Bar -->
       <Grid Grid.Column="0"  Width="140">
-        <StackPanel Margin="0 5" >
+        <StackPanel Margin="0 5" x:Name="paramsContainer" >
           
-          <Label>Ip address:</Label>
+          <Label x:Name="ipLab">Ip address:</Label>
           <TextBox x:Name="ipAddressTxtBox">192.168.100.22</TextBox>
           
-          <Label>User name: </Label>
+          
+          <Label x:Name="userNameLab">User name: </Label>
           <TextBox x:Name="userNameTxtBox">otax</TextBox>
           
 
-          <Label>Auth Password:</Label>
+          <Label x:Name="authPassLab">Auth Password:</Label>
           <TextBox x:Name="authPasswordTxtBox">otaxotax</TextBox>
 
           
-          <Label>Priv Password:</Label>
+          <Label x:Name="privPassLab">Priv Password:</Label>
           <TextBox x:Name="privPasswordTxtBox">otaxotax</TextBox>
-            
+
+          <Label x:Name="communityLab">Community:</Label>
+          <TextBox x:Name="communityTxtBox">public</TextBox>
+          
         </StackPanel>
       </Grid>
       <!-- Graph -->
