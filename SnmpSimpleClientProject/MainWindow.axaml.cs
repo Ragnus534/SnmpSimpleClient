@@ -19,19 +19,28 @@ namespace SnmpSimpleClientProject
         private TextBox txtForSnmpSet;
         bool getOperation;
 
-        bool v3ButtonCheck;
-        bool v2ButtonCheck;
+        bool v3;
 
         public MainWindow()
         {
+            
             InitializeComponent();
-
+            
             labelForSet = new Label() { Content = "SET: " };
             txtForSnmpSet = new TextBox();
             txtForSnmpSet.Margin = new Thickness(5);
             txtForSnmpSet.Name = "oidSetTxtBox";
             getOperation = true;
-            v3ButtonCheck = true;
+
+            userNameLab.IsVisible = true;
+            userNameLab.IsVisible = true;
+            userNameTxtBox.IsVisible = true;
+            privPassLab.IsVisible = true;
+            privPasswordTxtBox.IsVisible = true;
+            authPassLab.IsVisible = true;
+            authPasswordTxtBox.IsVisible = true;
+            communityLab.IsVisible = false;
+            communityTxtBox.IsVisible = false;
         }
 
         public void GetPropertyChecked(object sender, RoutedEventArgs e)
@@ -105,15 +114,43 @@ namespace SnmpSimpleClientProject
 
         public void V3ButtonClicked(object sender, RoutedEventArgs e)
         {
+            V3ButtonClicked(sender, e, V3Button);
+        }
+
+        public void V3ButtonClicked(object sender, RoutedEventArgs e, Avalonia.Controls.Primitives.ToggleButton v3Button)
+        {
             V2Button.IsChecked = false;
             V3Button.IsChecked = true;
+            v3 = (bool)V2Button.IsChecked;
+
+            //get ip control 
+            userNameLab.IsVisible = true;
+            userNameLab.IsVisible = true;
+            userNameTxtBox.IsVisible = true;
+            privPassLab.IsVisible = true;
+            privPasswordTxtBox.IsVisible = true;
+            authPassLab.IsVisible = true;
+            authPasswordTxtBox.IsVisible = true;
+            communityLab.IsVisible = false;
+            communityTxtBox.IsVisible = false;
+
         }
 
         public void V2ButtonClicked(object sender, RoutedEventArgs e)
         {
             V3Button.IsChecked = false;
             V2Button.IsChecked = true;
+            v3 = (bool)V2Button.IsChecked;
 
+            userNameLab.IsVisible = false;
+            userNameLab.IsVisible = false;
+            userNameTxtBox.IsVisible = false;
+            authPassLab.IsVisible = false;
+            authPasswordTxtBox.IsVisible = false;
+            privPassLab.IsVisible = false;
+            privPasswordTxtBox.IsVisible = false;
+            communityLab.IsVisible = true;
+            communityTxtBox.IsVisible = true;
         }
     }
 }
