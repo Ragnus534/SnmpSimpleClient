@@ -23,9 +23,9 @@ namespace SnmpSimpleClientProject
 
         public MainWindow()
         {
-            
+
             InitializeComponent();
-            
+
             labelForSet = new Label() { Content = "SET: " };
             txtForSnmpSet = new TextBox();
             txtForSnmpSet.Margin = new Thickness(5);
@@ -41,6 +41,7 @@ namespace SnmpSimpleClientProject
             authPasswordTxtBox.IsVisible = true;
             communityLab.IsVisible = false;
             communityTxtBox.IsVisible = false;
+            v3 = true;
         }
 
         public void GetPropertyChecked(object sender, RoutedEventArgs e)
@@ -61,52 +62,110 @@ namespace SnmpSimpleClientProject
         {
             new Thread(() =>
             {
-                var auth = new MD5AuthenticationProvider(new OctetString(authPasswordTxtBox.Text));
-                var priv = new DESPrivacyProvider(new OctetString(privPasswordTxtBox.Text), auth);
-
-                try
+                if (v3)
                 {
-                    Discovery discovery = Messenger.GetNextDiscovery(SnmpType.GetRequestPdu);
-                    ReportMessage report = discovery.GetResponse(2000, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
+                    var auth = new MD5AuthenticationProvider(new OctetString(authPasswordTxtBox.Text));
+                    var priv = new DESPrivacyProvider(new OctetString(privPasswordTxtBox.Text), auth);
 
-                    if (getOperation)
+                    try
                     {
-                        GetRequestMessage request = new GetRequestMessage(VersionCode.V3, Messenger.NextMessageId, Messenger.NextRequestId, new OctetString(userNameTxtBox.Text), new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text)) }, priv, Messenger.MaxMessageSize, report);
-                        ISnmpMessage reply = request.GetResponse(60000, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
-                        if (reply.Pdu().ErrorStatus.ToInt32() != 0) // != ErrorCode.NoError
+                        Discovery discovery = Messenger.GetNextDiscovery(SnmpType.GetRequestPdu);
+                        ReportMessage report = discovery.GetResponse(2000, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
+
+                        if (getOperation)
                         {
-                            logTxtBox.Text += Environment.NewLine + "error in response";
+                            GetRequestMessage request = new GetRequestMessage(VersionCode.V3, Messenger.NextMessageId, Messenger.NextRequestId, new OctetString(userNameTxtBox.Text), new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text)) }, priv, Messenger.MaxMessageSize, report);
+                            ISnmpMessage reply = request.GetResponse(60000, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
+                            if (reply.Pdu().ErrorStatus.ToInt32() != 0) // != ErrorCode.NoError
+                            {
+                                Dispatcher.UIThread.Post(() =>
+                                {
+                                    logTxtBox.Text += Environment.NewLine + "error in response";
+                                });
+                            }
+                            else
+                            {
+                                foreach (Variable oidReply in reply.Pdu().Variables)
+                                {
+                                    Dispatcher.UIThread.Post(() =>
+                                    {
+                                        logTxtBox.Text += Environment.NewLine + "OID " + oidGetTxtBox.Text + ": " + oidReply.Data.ToString();
+                                    });
+                                }
+
+                            }
                         }
                         else
                         {
-                            foreach (Variable oidReply in reply.Pdu().Variables)
+                            SetRequestMessage request = new SetRequestMessage(VersionCode.V3, Messenger.NextMessageId, Messenger.NextRequestId, new OctetString(userNameTxtBox.Text), new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text), new OctetString(txtForSnmpSet.Text)) }, priv, Messenger.MaxMessageSize, report);
+                            ISnmpMessage reply = request.GetResponse(60000, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
+                            if (reply.Pdu().ErrorStatus.ToInt32() != 0) // != ErrorCode.NoError
                             {
-                                logTxtBox.Text += Environment.NewLine + "OID " + oidGetTxtBox.Text + ": " + oidReply.Data.ToString();
+                                Dispatcher.UIThread.Post(() =>
+                                {
+                                    logTxtBox.Text += Environment.NewLine + "error in response";
+                                });
                             }
+                            else
+                            {
+                                foreach (Variable oidReply in reply.Pdu().Variables)
+                                {
+                                    Dispatcher.UIThread.Post(() => { logTxtBox.Text += Environment.NewLine + "OID " + oidGetTxtBox.Text + ": " + oidReply.Data.ToString(); });
+                                }
 
+                            }
                         }
                     }
-                    else
+                    catch (TimeoutException ex)
                     {
-                        SetRequestMessage request = new SetRequestMessage(VersionCode.V3, Messenger.NextMessageId, Messenger.NextRequestId, new OctetString(userNameTxtBox.Text), new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text), new OctetString(txtForSnmpSet.Text)) }, priv, Messenger.MaxMessageSize, report);
-                        ISnmpMessage reply = request.GetResponse(60000, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
-                        if (reply.Pdu().ErrorStatus.ToInt32() != 0) // != ErrorCode.NoError
-                        {
-                            logTxtBox.Text += Environment.NewLine + "error in response";
-                        }
-                        else
-                        {
-                            foreach (Variable oidReply in reply.Pdu().Variables)
-                            {
-                                logTxtBox.Text += Environment.NewLine + "OID " + oidGetTxtBox.Text + ": " + oidReply.Data.ToString();
-                            }
-
-                        }
+                        Dispatcher.UIThread.Post(() => { logTxtBox.Text += Environment.NewLine + "Problem with connection"; });
                     }
                 }
-                catch (TimeoutException ex)
+                else
                 {
-                    Dispatcher.UIThread.Post(() => { logTxtBox.Text += Environment.NewLine + "Problem with connection"; });
+                    try
+                    {
+
+
+                        if (getOperation)
+                        {
+                            Dispatcher.UIThread.Post(() =>
+                            {
+                                var results = Messenger.Get(VersionCode.V2,
+                                    new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161),
+                                    new OctetString(communityTxtBox.Text),
+                                    new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text)) },
+                                    60000);
+
+                                foreach(var result in results)
+                                {
+                                    logTxtBox.Text += Environment.NewLine + "OID " + result.Id + ": " + result.Data.ToString();
+                                }
+
+                                
+                            });
+                        }
+                        else
+                        {
+                            Dispatcher.UIThread.Post(() =>
+                            {
+                                IList<Variable> results2 =  Messenger.Set(VersionCode.V2,
+                                new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161),
+                                new OctetString(communityTxtBox.Text),
+                                new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text), new OctetString(txtForSnmpSet.Text)) },
+                                60000);
+
+                                foreach (Variable result2 in results2)
+                                {
+                                    logTxtBox.Text += Environment.NewLine + "OID " + result2.Id + ": " + result2.Data.ToString();
+                                }
+                            });
+                        }
+                    }
+                    catch (TimeoutException ex)
+                    {
+                        Dispatcher.UIThread.Post(() => { logTxtBox.Text += Environment.NewLine + "Problem with connection"; });
+                    }
                 }
 
             }).Start();
@@ -121,7 +180,7 @@ namespace SnmpSimpleClientProject
         {
             V2Button.IsChecked = false;
             V3Button.IsChecked = true;
-            v3 = (bool)V2Button.IsChecked;
+            v3 = (bool)V3Button.IsChecked;
 
             //get ip control 
             userNameLab.IsVisible = true;
