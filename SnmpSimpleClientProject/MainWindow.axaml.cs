@@ -62,6 +62,7 @@ namespace SnmpSimpleClientProject
         {
             new Thread(() =>
             {
+                int timeout = int.Parse(timeoutTxtBox.Text);
                 if (v3)
                 {
                     var auth = new MD5AuthenticationProvider(new OctetString(authPasswordTxtBox.Text));
@@ -75,7 +76,7 @@ namespace SnmpSimpleClientProject
                         if (getOperation)
                         {
                             GetRequestMessage request = new GetRequestMessage(VersionCode.V3, Messenger.NextMessageId, Messenger.NextRequestId, new OctetString(userNameTxtBox.Text), new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text)) }, priv, Messenger.MaxMessageSize, report);
-                            ISnmpMessage reply = request.GetResponse(60000, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
+                            ISnmpMessage reply = request.GetResponse(timeout, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
                             if (reply.Pdu().ErrorStatus.ToInt32() != 0) // != ErrorCode.NoError
                             {
                                 Dispatcher.UIThread.Post(() =>
@@ -98,7 +99,7 @@ namespace SnmpSimpleClientProject
                         else
                         {
                             SetRequestMessage request = new SetRequestMessage(VersionCode.V3, Messenger.NextMessageId, Messenger.NextRequestId, new OctetString(userNameTxtBox.Text), new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text), new OctetString(txtForSnmpSet.Text)) }, priv, Messenger.MaxMessageSize, report);
-                            ISnmpMessage reply = request.GetResponse(60000, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
+                            ISnmpMessage reply = request.GetResponse(timeout, new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161));
                             if (reply.Pdu().ErrorStatus.ToInt32() != 0) // != ErrorCode.NoError
                             {
                                 Dispatcher.UIThread.Post(() =>
@@ -135,7 +136,7 @@ namespace SnmpSimpleClientProject
                                     new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161),
                                     new OctetString(communityTxtBox.Text),
                                     new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text)) },
-                                    60000);
+                                    timeout);
 
                                 foreach(var result in results)
                                 {
@@ -153,7 +154,7 @@ namespace SnmpSimpleClientProject
                                 new IPEndPoint(IPAddress.Parse(ipAddressTxtBox.Text), 161),
                                 new OctetString(communityTxtBox.Text),
                                 new List<Variable> { new Variable(new ObjectIdentifier(oidGetTxtBox.Text), new OctetString(txtForSnmpSet.Text)) },
-                                60000);
+                                timeout);
 
                                 foreach (Variable result2 in results2)
                                 {
