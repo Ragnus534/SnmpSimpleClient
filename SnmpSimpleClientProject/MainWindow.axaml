@@ -78,7 +78,7 @@
 
       <ToggleButton Grid.Column="3" Margin="2,-5,8,0">MD5</ToggleButton>
       <ToggleButton Grid.Column="4" Margin="2,-5,8,0">DES</ToggleButton>
-      <Label Grid.Column="7">Connected</Label>
+      <Label Grid.Column="7">Last operation: OK</Label>
     </Grid>
   </Grid>
 </Window>
