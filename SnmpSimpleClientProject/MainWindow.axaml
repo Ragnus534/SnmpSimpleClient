@@ -67,13 +67,18 @@
     </Grid>
 
     <!-- Bottom bar-->
-    <Grid  Grid.Row="2" Margin="8"  ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto" Background="#EEE">
+    <Grid  Grid.Row="2" Margin="8"  ColumnDefinitions="Auto,Auto,*,Auto,Auto,*,Auto,Auto" Background="#EEE">
       <ToggleButton x:Name="V2Button"  Grid.Column="0" Margin="0,0,8,0" Click="V2ButtonClicked">V2</ToggleButton>
       <ToggleButton x:Name="V3Button" Grid.Column="1" Margin="0,0,8,0" IsChecked="True" Click="V3ButtonClicked">V3</ToggleButton>
-      <Label Grid.Column="2" >Timeout: 60000 ms</Label>
+      <Grid Grid.Column="2" ColumnDefinitions="Auto,*,*">
+        <Label Grid.Column="0" Margin="0,0,10,0">Timeout:</Label>
+        <TextBox Grid.Column="1" Margin="0,-5,0,0" x:Name="timeoutTxtBox">60000</TextBox>
+        <Label Grid.Column="2" Margin="13,0,0,0">ms</Label>
+      </Grid>
+
       <ToggleButton Grid.Column="3" Margin="2,-5,8,0">MD5</ToggleButton>
       <ToggleButton Grid.Column="4" Margin="2,-5,8,0">DES</ToggleButton>
-      <Label Grid.Column="7">Connected</Label>
+      <Label Grid.Column="7">Last operation: OK</Label>
     </Grid>
   </Grid>
 </Window>
